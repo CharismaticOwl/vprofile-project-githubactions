@@ -1,12 +1,10 @@
 FROM openjdk:11 AS BUILD_IMAGE
 
-WORKDIR /app
-
 RUN apt update && apt install maven -y
 
 RUN git clone -b main https://github.com/CharismaticOwl/vprofile-project-githubactions.git
 
-RUN cd app/vprofile-project && mvn install
+RUN cd vprofile-project && mvn install
 
 
 FROM tomcat:9-jre11

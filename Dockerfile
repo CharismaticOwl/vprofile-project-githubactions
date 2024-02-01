@@ -1,6 +1,6 @@
-FROM openjdk:17 AS BUILD_IMAGE
+FROM openjdk:11 AS BUILD_IMAGE
 
-RUN apt update && apt install maven -y
+RUN sudo apt update && sudo apt install maven -y
 
 COPY ./ vprofile-project
 

@@ -1,15 +1,16 @@
 FROM openjdk:11 AS BUILD_IMAGE
 
-RUN sudo apt update && sudo apt install maven -y
+RUN apt update && apt install maven -y
 
-COPY ./ vprofile-project
+RUN git clone https://github.com/devopshydclub/vprofile-project.git
 
-RUN cd vprofile-project && mvn install
+RUN cd vprofile-project && git checkout docker && mvn install
 
-FROM tomcat:9-jre17
 
-LABEL "Project"='vprofile'
 
+FROM tomcat:9-jre11
+
+LABEL "Project"="Vprofile-app"
 LABEL "Author"="Satya"
 
 RUN rm -rf /usr/local/tomcat/webapps/*

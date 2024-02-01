@@ -45,3 +45,27 @@ jobs:
           SONAR_TOKEN: ${{ secrets.LOGIN }}
           SONAR_HOST_URL: ${{ secrets.HOST }}
 
+  BUILD_AND_TEST:
+    runs-on: ubuntu:latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Update application.properties file
+        run: |
+          sed -i "s/^jdbc.username.*$/jdbc.username\=${{ secrets.RDS_USER }}/" src/main/resources/application.properties
+          sed -i "s/^jdbc.password.*$/jdbc.password\=${{ secrets.RDS_PASSWORD }}/" src/main/resources/application.properties
+          sed -i "s/db01/${{ secrets.RDS_ENDPOINT }}/" src/main/resources/application.properties
+
+      - name: upload image to ECR
+        uses: appleboy/docker-ecr-action@master
+        with:
+          access_key: ${{ secrets.AWS_ID }}
+          secret_key: ${{ secrets.AWS_KEY }}
+          registry: ${{ secrets.AWS_ECR }}
+          repo: vprofileappimg
+          region: ap-south-1
+          tags: latest,${{ github.run_number }}
+          daemon_off: false
+          dockerfile: ./Dockerfile
+          context: ./

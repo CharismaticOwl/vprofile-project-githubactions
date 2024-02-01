@@ -4,9 +4,9 @@ WORKDIR /vprofile-project
 
 RUN apt update && apt install maven -y
 
-COPY ./ vprofile-project/
+COPY . vprofile-project/
 
-RUN cd vprofile-project && git checkout docker && mvn install
+RUN cd vprofile-project && mvn install
 
 
 FROM tomcat:9-jre11
